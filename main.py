@@ -13,15 +13,7 @@ register_matplotlib_converters()
 import datetime
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-    n = 5  # number of points
-    x = np.linspace(0, 1, n)  # n points in [0, 1]
-    y = np.zeros(n)  # n zeros (float data type)
-    for i in range(n):
-        y[i] = f(x[i])
-        print(y[i])
+
 
 
 
