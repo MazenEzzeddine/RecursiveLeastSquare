@@ -25,7 +25,7 @@ def iceCream():
     df_ice_cream.rename(columns={'DATE': 'date', 'IPN31152N': 'production'}, inplace=True)
     df_ice_cream['date'] = pd.to_datetime(df_ice_cream.date)
     df_ice_cream.set_index('date', inplace=True)
-    start_date = pd.to_datetime('2010-01-01')
+    start_date = pd.to_datetime('2005-01-01')
     df_ice_cream = df_ice_cream[start_date:]
     print(df_ice_cream.head())
 
@@ -37,7 +37,7 @@ def iceCream():
     test_size = len(df)
     lam = 0.98
     delta = 10
-    num_vars = 8
+    num_vars = 1
     LS = myRLS(num_vars, lam)
     # We won't use RLS.fit because I want to save the predictions.
     pred_x = []
@@ -48,16 +48,16 @@ def iceCream():
         x = np.matrix(np.zeros((1, num_vars)))
         for j in range(num_vars):
             #x[0, j] = i ** j
-            if (i > 8):
-                x[0, j] = df[i - j]  # or inverse
+            if (i > num_vars):
+                x[0, j] = df[i - j-1]  # or inverse
             else:
-                x[0, j] = i ** j
+                x[0, j] = 0
         pred_x.append(i)
         pred_y.append(float(x * LS.w))
         pred_error.append(LS.get_error())
         LS.add_obs(x.T, df[i])
-    ax = plt.plot(pred_x[50:], pred_y[50:], label='predicted')
-    _ = plt.plot(pred_x[50:], df[50:], label='actual')
+    ax = plt.plot(pred_x[0:], pred_y[0:], label='predicted')
+    _ = plt.plot(pred_x[0:], df[0:], label='actual')
     plt.title("ice cream production prediction")
     #########################################################
     # ax = plt.plot(pred_x[1:], pred_y[1:], label='predicted')
@@ -73,7 +73,7 @@ def iceCream():
 
 
 def seriesTest():
-    start = datetime.date(2014, 7, 11)
+    start = datetime.date(2010, 7, 11)
     end = datetime.date(2021, 3, 7)
     f = web.DataReader('SPY', 'iex', start, end, api_key='pk_f50c1a4af6cc468a9fd0d853f0a5478c')
 
@@ -96,15 +96,15 @@ def seriesTest():
         for j in range(num_vars):
            # x[0, j] = i ** j
            if (i > 5):
-               x[0, j] = y[i - j]  # or inverse
+               x[0, j] = y[i - j - 2]  # or inverse
            else:
-               x[0, j] = i ** j
+               x[0, j] = 0
         pred_x.append(i)
         pred_y.append(float(x * LS.w))
         pred_error.append(LS.get_error())
         LS.add_obs(x.T, y[i])
-    #ax = plt.plot(pred_x[50:], pred_y[50:], label='predicted')
-    _ = plt.plot(pred_x[50:], y[50:], label='actual')
+    ax = plt.plot(pred_x[0:], pred_y[0:], label='predicted')
+    _ = plt.plot(pred_x[0:], y[0:], label='actual')
     plt.title("SPY stock indicator closing price, 11/7/2014 - 3/7/2021")
 
     # ax = plt.plot(pred_x[1:], pred_y[1:], label='predicted')
@@ -135,7 +135,7 @@ def firstTest():
             if(i>5):
                 x[0, j] = y[i-j] #or inverse
             else:
-                x[0, j] = i ** j
+                x[0, j] = 0
 
         pred_x.append(i)
         pred_y.append(float(x * LS.w))
