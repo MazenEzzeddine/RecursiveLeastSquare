@@ -1,6 +1,5 @@
 import numpy as np
 import math
-import pandas as pd
 
 
 class myRLS:
@@ -14,25 +13,20 @@ class myRLS:
         self.w = np.matrix(np.zeros(self.num_vars))
         self.w = self.w.reshape(self.w.shape[1], 1)
 
-        # Variables needed for add_obs
         self.lam_inv = lam ** (-1)
-        self.sqrt_lam_inv = math.sqrt(self.lam_inv)
 
-        # A priori error
         self.a_priori_error = 0
 
-        # Count of number of observations added
         self.num_obs = 0
 
     def add_obs(self, x, t):
 
         kn= self.P * x
-        kd= 1 + (x.T * self.P * x)
         kd= self.lam + (x.T * self.P * x)
 
         k= kn/kd
         pn = self.P * x * x.T * self.P
-        pd =  1 + x.T * self.P * x
+        pd =  self.lam  + x.T * self.P * x
 
         self.P = (self.P - (pn/pd))* self.lam_inv
 
